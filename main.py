@@ -1,10 +1,7 @@
 import os
 import discord
-import time
 import asyncio
-from discord.ext import commands
-
-bot = commands.Bot(command_prefix='/')
+from keepalive import keep_alive
 
 TOKEN = os.environ['token']
 
@@ -28,7 +25,7 @@ async def on_message(message):
 			vc.play(discord.FFmpegPCMAudio(source="sabadaco.mp3"))
 
 			# Sleep while audio is playing.
-			while vc.is_playing():
+			while vc.is_playing() and vc.is_connected():
 				await asyncio.sleep(0.3)
 			await vc.disconnect()
 
@@ -44,7 +41,7 @@ async def on_message(message):
 			vc.play(discord.FFmpegPCMAudio(source="shake it.mp3"))
 
 			# Sleep while audio is playing.
-			while vc.is_playing():
+			while vc.is_playing() and vc.is_connected():
 				await asyncio.sleep(0.3)
 			await vc.disconnect()
 
@@ -60,11 +57,23 @@ async def on_message(message):
 			vc.play(discord.FFmpegPCMAudio(source="jet music.mp3"))
 
 			# Sleep while audio is playing.
-			while vc.is_playing():
+			while vc.is_playing() and vc.is_connected():
 				await asyncio.sleep(0.3)
 			await vc.disconnect()
 
 		# Delete command after the audio is done playing.
 		await message.delete()
+
+	if message.content.startswith('stop'):
+		if discord.is_connected():
+			discord.disconnect()
+		message.delete()
+
+try:
+	replit = os.environ['replit']
+	if replit is not None:
+		keep_alive()
+except:
+	pass
 
 client.run(TOKEN)
