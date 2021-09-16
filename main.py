@@ -1,7 +1,6 @@
 import os
 import discord
 import asyncio
-from keepalive import keep_alive
 
 TOKEN = os.environ['token']
 
@@ -12,66 +11,66 @@ async def on_ready():
 	print('Logged in as {0.user}!'.format(client))
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
 	if message.author == client.user:
 		return
 
-	if message.content.startswith('kasino'):
+	if message.content == 'kasino':
 		voice_channel = message.author.voice
-
-		if voice_channel != None:
-			voice_channel = voice_channel.channel
-			vc = await voice_channel.connect()
-			vc.play(discord.FFmpegPCMAudio(source="sabadaco.mp3"))
-
-			# Sleep while audio is playing.
-			while vc.is_playing() and vc.is_connected():
-				await asyncio.sleep(0.3)
-			await vc.disconnect()
+		await play_song("sabadaco.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
 
-	if message.content.startswith('shake it'):
+	elif message.content == 'shake it':
 		voice_channel = message.author.voice
-
-		if voice_channel != None:
-			voice_channel = voice_channel.channel
-			vc = await voice_channel.connect()
-			vc.play(discord.FFmpegPCMAudio(source="shake it.mp3"))
-
-			# Sleep while audio is playing.
-			while vc.is_playing() and vc.is_connected():
-				await asyncio.sleep(0.3)
-			await vc.disconnect()
+		await play_song("shake it.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
 
-	if message.content.startswith('jet music'):
+	elif message.content == 'jet music':
 		voice_channel = message.author.voice
-
-		if voice_channel != None:
-			voice_channel = voice_channel.channel
-			vc = await voice_channel.connect()
-			vc.play(discord.FFmpegPCMAudio(source="jet music.mp3"))
-
-			# Sleep while audio is playing.
-			while vc.is_playing() and vc.is_connected():
-				await asyncio.sleep(0.3)
-			await vc.disconnect()
+		await play_song("jet music.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
 
-	if message.content.startswith('stop'):
-		if discord.is_connected():
-			discord.disconnect()
-		message.delete()
+	elif message.content == 'stop':
+		voice_channel = message.author.voice
+		if voice_channel == None:
+			return
+
+		voice_clients = client.voice_clients
+		for vc in voice_clients:
+			if vc.channel == voice_channel.channel:
+				await vc.disconnect()
+				break
+
+		await message.delete()
+
+async def play_song(filename: str, voice_channel: discord.VoiceState):
+	if voice_channel == None:
+		return
+
+	voice_channel = voice_channel.channel
+	voice_client = await voice_channel.connect()
+	voice_client.play(discord.FFmpegPCMAudio(source=filename))
+
+	# Sleep while audio is playing, then disconnect
+	while voice_client.is_playing() and voice_client.is_connected():
+		await asyncio.sleep(0.3)
+	await voice_client.disconnect()
+
+
+# #
+# Inicializar o bot
+# #
 
 try:
 	replit = os.environ['replit']
 	if replit is not None:
+		from keepalive import keep_alive
 		keep_alive()
 except:
 	pass
