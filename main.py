@@ -46,7 +46,7 @@ async def on_message(message: discord.Message):
 		voice_channel = voice_channel.channel
 		await voice_channel.connect()
 
-	elif message.content == 'stop':
+	elif message.content == 'pare':
 		voice_channel = message.author.voice
 		if voice_channel == None:
 			return
