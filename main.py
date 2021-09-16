@@ -68,8 +68,8 @@ async def play_song(filename: str, voice_channel: discord.VoiceState):
 # #
 
 try:
-	replit = os.environ['replit']
-	if replit is not None:
+	alive = os.environ['alive']
+	if alive is not None:
 		from keepalive import keep_alive
 		keep_alive()
 except:
