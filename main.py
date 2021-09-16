@@ -17,21 +17,21 @@ async def on_message(message: discord.Message):
 
 	if message.content == 'kasino':
 		voice_channel = message.author.voice
-		await play_song("mp3/sabadaco.mp3", voice_channel)
+		await play_song("./mp3/sabadaco.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
 
 	elif message.content == 'shake it':
 		voice_channel = message.author.voice
-		await play_song("mp3/shake it.mp3", voice_channel)
+		await play_song("./mp3/shake it.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
 
 	elif message.content == 'jet music':
 		voice_channel = message.author.voice
-		await play_song("mp3/jet music.mp3", voice_channel)
+		await play_song("./mp3/jet music.mp3", voice_channel)
 
 		# Delete command after the audio is done playing.
 		await message.delete()
