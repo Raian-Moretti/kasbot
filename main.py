@@ -16,30 +16,16 @@ async def on_message(message: discord.Message):
 		return
 
 	if message.content == 'kasino':
-		voice_channel = message.author.voice
-		await play_song("./mp3/sabadaco.mp3", voice_channel)
-
-		# Delete command after the audio is done playing.
-		await message.delete()
+		await play_song("./mp3/sabadaco.mp3", message.author)
 
 	elif message.content == 'shake it':
-		voice_channel = message.author.voice
-		await play_song("./mp3/shake it.mp3", voice_channel)
-
-		# Delete command after the audio is done playing.
-		await message.delete()
+		await play_song("./mp3/shake it.mp3", message.author)
 
 	elif message.content == 'jet music':
-		voice_channel = message.author.voice
-		await play_song("./mp3/jet music.mp3", voice_channel)
-
-		# Delete command after the audio is done playing.
-		await message.delete()
+		await play_song("./mp3/jet music.mp3", message.author)
 
 	elif message.content in ['compania', 'companhia']:
 		voice_channel = message.author.voice
-		await message.delete()
-
 		if voice_channel == None:
 			return
 
@@ -57,9 +43,11 @@ async def on_message(message: discord.Message):
 				await vc.disconnect()
 				break
 
-		await message.delete()
+	# Delete command after action is done.
+	await message.delete()
 
-async def play_song(filename: str, voice_channel: discord.VoiceState):
+async def play_song(filename: str, author: discord.Member):
+	voice_channel = author.voice
 	if voice_channel == None:
 		return
 
