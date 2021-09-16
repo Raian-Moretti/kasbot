@@ -21,7 +21,7 @@ Para executar com *keepalive* (manter o servidor vivo com um servidor web):
     * Toca o hit SHAKE IT.
 * `jet music`
     * NAS PISTAS DO JET MUSIC!
-* `stop`
+* `pare`
     * Para de tocar e desconecta.
 * `companhia`
     * Entra no canal e te faz companhia, sem falar nem ouvir nada, apenas o doce som do silêncio.
