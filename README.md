@@ -23,3 +23,5 @@ Para executar com *keepalive* (manter o servidor vivo com um servidor web):
     * NAS PISTAS DO JET MUSIC!
 * `stop`
     * Para de tocar e desconecta.
+* `companhia`
+    * Entra no canal e te faz companhia, sem falar nem ouvir nada, apenas o doce som do silêncio.

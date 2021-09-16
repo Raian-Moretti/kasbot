@@ -36,6 +36,16 @@ async def on_message(message: discord.Message):
 		# Delete command after the audio is done playing.
 		await message.delete()
 
+	elif message.content in ['compania', 'companhia']:
+		voice_channel = message.author.voice
+		await message.delete()
+
+		if voice_channel == None:
+			return
+
+		voice_channel = voice_channel.channel
+		await voice_channel.connect()
+
 	elif message.content == 'stop':
 		voice_channel = message.author.voice
 		if voice_channel == None:
