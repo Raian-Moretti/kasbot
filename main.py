@@ -10,6 +10,9 @@ client = discord.Client()
 async def on_ready():
 	print('Logged in as {0.user}!'.format(client))
 
+	# Canal do KASINO
+	await client.get_channel(887381114124136461).connect()
+
 @client.event
 async def on_message(message: discord.Message):
 	if message.author == client.user:
