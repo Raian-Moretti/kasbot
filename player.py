@@ -3,7 +3,6 @@ import functools
 import itertools
 import math
 import random
-import os
 
 import discord
 import youtube_dl
@@ -12,7 +11,6 @@ from discord.ext import commands
 
 # Silence useless bug reports messages
 youtube_dl.utils.bug_reports_message = lambda: ''
-
 
 class VoiceError(Exception):
     pass
@@ -175,8 +173,8 @@ class SongQueue(asyncio.Queue):
 
 
 class VoiceState:
-    def __init__(self, bot: commands.Bot, ctx: commands.Context):
-        self.bot = bot
+    def __init__(self, client: commands.Bot, ctx: commands.Context):
+        self.client = client
         self._ctx = ctx
 
         self.current = None
@@ -188,7 +186,7 @@ class VoiceState:
         self._volume = 0.5
         self.skip_votes = set()
 
-        self.audio_player = bot.loop.create_task(self.audio_player_task())
+        self.audio_player = client.loop.create_task(self.audio_player_task())
 
     def __del__(self):
         self.audio_player.cancel()
@@ -226,7 +224,7 @@ class VoiceState:
                     async with timeout(180):  # 3 minutes
                         self.current = await self.songs.get()
                 except asyncio.TimeoutError:
-                    self.bot.loop.create_task(self.stop())
+                    self.client.loop.create_task(self.stop())
                     return
 
             self.current.source.volume = self._volume
@@ -253,7 +251,6 @@ class VoiceState:
         if self.voice:
             await self.voice.disconnect()
             self.voice = None
-
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -313,7 +310,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command(name='leave', aliases=['disconnect'])
+    @commands.command(name='leave', aliases=['disconnect', 'q'])
     @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
         """Clears the queue and leaves the voice channel."""
@@ -491,14 +488,3 @@ class Music(commands.Cog):
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
-
-
-bot = commands.Bot('music.', description='Yet another music bot.')
-bot.add_cog(Music(bot))
-
-
-@bot.event
-async def on_ready():
-    print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
-
-bot.run(os.getenv("TOKEN"))
