@@ -20,12 +20,15 @@ async def on_message(message: discord.Message):
 
 	if message.content == 'kasino':
 		await play_song("./mp3/sabadaco.mp3", message.author)
+		await message.delete()
 
 	elif message.content == 'shake it':
 		await play_song("./mp3/shake it.mp3", message.author)
+		await message.delete()
 
 	elif message.content == 'jet music':
 		await play_song("./mp3/jet music.mp3", message.author)
+		await message.delete()
 
 	elif message.content in ['compania', 'companhia']:
 		voice_channel = message.author.voice
@@ -34,6 +37,7 @@ async def on_message(message: discord.Message):
 
 		voice_channel = voice_channel.channel
 		await voice_channel.connect()
+		await message.delete()
 
 	elif message.content == 'pare':
 		voice_channel = message.author.voice
@@ -46,8 +50,8 @@ async def on_message(message: discord.Message):
 				await vc.disconnect()
 				break
 
-	# Delete command after action is done.
-	await message.delete()
+		# Delete command after action is done.
+		await message.delete()
 
 async def play_song(filename: str, author: discord.Member):
 	voice_channel = author.voice
