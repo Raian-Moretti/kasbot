@@ -37,7 +37,7 @@ class Kasino(commands.Cog):
         if voice_channel == None:
             return
 
-        voice_clients = self.client.voice_clients
+        voice_clients = self.bot.voice_clients
         for vc in voice_clients:
             if vc.channel == voice_channel.channel:
                 await vc.disconnect()
