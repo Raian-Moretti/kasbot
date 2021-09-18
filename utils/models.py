@@ -220,7 +220,7 @@ class VoiceState:
                     async with timeout(180):  # 3 minutes
                         self.current = await self.songs.get()
                 except asyncio.TimeoutError:
-                    self.client.loop.create_task(self.stop())
+                    # self.client.loop.create_task(self.stop())
                     return
 
             self.current.source.volume = self._volume
