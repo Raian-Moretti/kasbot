@@ -8,17 +8,17 @@ class Kasino(commands.Cog):
 
     @commands.command(name='kasino')
     async def _kasino(self, ctx: commands.Context):
-        await self.play_song("./mp3/sabadaco.mp3", ctx.message.author)
+        await self.play_song("./mp3/sabadaco.mp3", ctx)
         await ctx.message.delete()
 
     @commands.command(name='shake it')
     async def _shake_it(self, ctx: commands.Context):
-        await self.play_song("./mp3/shake it.mp3", ctx.message.author)
+        await self.play_song("./mp3/shake it.mp3", ctx)
         await ctx.message.delete()
 
     @commands.command(name='jet music')
     async def _jet_music(self, ctx: commands.Context):
-        await self.play_song("./mp3/jet music.mp3", ctx.message.author)
+        await self.play_song("./mp3/jet music.mp3", ctx)
         await ctx.message.delete()
 
     @commands.command(name='companhia', aliases=['compania'])
@@ -46,13 +46,17 @@ class Kasino(commands.Cog):
         # Delete command after action is done.
         await ctx.message.delete()
 
-    async def play_song(self, filename: str, author: discord.Member):
-        voice_channel = author.voice
-        if voice_channel == None:
+    async def play_song(self, filename: str, ctx: commands.Context):
+        if ctx.author.voice == None:
             return
 
-        voice_channel = voice_channel.channel
-        voice_client = await voice_channel.connect()
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+
+        if voice_client == None:
+            voice_client = await voice_client.connect()
+        elif voice_client.is_playing():
+            return
+
         voice_client.play(discord.FFmpegPCMAudio(source=filename))
 
         # Sleep while audio is playing, then disconnect
