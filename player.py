@@ -180,7 +180,7 @@ class Music(commands.Cog):
                  .set_footer(text='Viewing page {}/{}'.format(page, pages)))
         await ctx.send(embed=embed)
 
-    @commands.command(name='shuffle', aliases=['shuff'])
+    @commands.command(name='shuffle', aliases=['sf'])
     async def _shuffle(self, ctx: commands.Context):
         """Shuffles the queue."""
 
