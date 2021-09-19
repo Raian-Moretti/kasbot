@@ -18,8 +18,13 @@ class Music(commands.Cog):
 
     def get_voice_state(self, ctx: commands.Context):
         state = self.voice_states.get(ctx.guild.id)
-        if not state:
+        if state is None:
             state = VoiceState(self.bot, ctx)
+
+            voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+            if voice_client is not None:
+                state.voice = voice_client
+
             self.voice_states[ctx.guild.id] = state
 
         return state
@@ -136,7 +141,7 @@ class Music(commands.Cog):
         if not ctx.voice_state.is_playing:
             return await ctx.send('Not playing any music right now...')
 
-       
+
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
 

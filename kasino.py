@@ -11,23 +11,23 @@ class Kasino(commands.Cog):
         await self.play_song("./mp3/sabadaco.mp3", ctx)
         await ctx.message.delete()
 
-    @commands.command(name='shake it')
+    @commands.command(name='shakeit')
     async def _shake_it(self, ctx: commands.Context):
         await self.play_song("./mp3/shake it.mp3", ctx)
         await ctx.message.delete()
 
-    @commands.command(name='jet music')
+    @commands.command(name='jetmusic')
     async def _jet_music(self, ctx: commands.Context):
         await self.play_song("./mp3/jet music.mp3", ctx)
         await ctx.message.delete()
 
     @commands.command(name='companhia', aliases=['compania'])
     async def _companhia(self, ctx: commands.Context):
-        voice_channel = ctx.message.author.voice
-        if voice_channel == None:
+        voice_state = ctx.message.author.voice
+        if voice_state == None:
             return
 
-        voice_channel = voice_channel.channel
+        voice_channel = voice_state.channel
         await voice_channel.connect()
         await ctx.message.delete()
 
@@ -53,7 +53,8 @@ class Kasino(commands.Cog):
         voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice_client == None:
-            voice_client = await voice_client.connect()
+            voice_channel = ctx.message.author.voice.channel
+            voice_client = await voice_channel.connect()
         elif voice_client.is_playing():
             return
 
@@ -63,3 +64,11 @@ class Kasino(commands.Cog):
         while voice_client.is_playing() and voice_client.is_connected():
             await asyncio.sleep(0.3)
         await voice_client.disconnect()
+
+    async def join(self, ctx: commands.Context):
+        destination = ctx.author.voice.channel
+
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+
+        if voice_client == None or voice_client.channel != destination:
+            voice_client = await destination.connect()
