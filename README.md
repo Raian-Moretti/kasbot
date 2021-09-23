@@ -45,7 +45,7 @@ Para executar com *keepalive* (manter o servidor vivo com um servidor web):
     * Pula pra próxima música na fila.
 * `-queue`
     * Mostra a fila de músicas.
-* `-shuffle` (`-shuff`)
+* `-shuffle` (`-sf`)
     * Embaralha as músicas dentro da fila.
 * `-remove [indice]`
     * Remove uma música baseada no indice na fila.
